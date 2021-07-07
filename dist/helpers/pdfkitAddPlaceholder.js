@@ -28,14 +28,15 @@ const pdfkitAddPlaceholder = ({
   name = 'Name from p12',
   location = 'Location from p12',
   signatureLength = _const.DEFAULT_SIGNATURE_LENGTH,
-  byteRangePlaceholder = _const.DEFAULT_BYTE_RANGE_PLACEHOLDER
+  byteRangePlaceholder = _const.DEFAULT_BYTE_RANGE_PLACEHOLDER,
+  sigType = 'adbe.pkcs7.detached'
 }) => {
   /* eslint-disable no-underscore-dangle,no-param-reassign */
   // Generate the signature placeholder
   const signature = pdf.ref({
     Type: 'Sig',
     Filter: 'Adobe.PPKLite',
-    SubFilter: 'adbe.pkcs7.detached',
+    SubFilter: sigType,
     ByteRange: [0, byteRangePlaceholder, byteRangePlaceholder, byteRangePlaceholder],
     Contents: Buffer.from(String.fromCharCode(0).repeat(signatureLength)),
     Reason: new String(reason),
