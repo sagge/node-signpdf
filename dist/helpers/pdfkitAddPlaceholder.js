@@ -23,7 +23,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 const pdfkitAddPlaceholder = ({
   pdf,
-  pdfBuffer,
   reason,
   contactInfo = 'emailfromp1289@gmail.com',
   name = 'Name from p12',
@@ -48,25 +47,21 @@ const pdfkitAddPlaceholder = ({
     // eslint-disable-line no-new-wrappers
     Location: new String(location) // eslint-disable-line no-new-wrappers
 
-  });
+  }); // Check if pdf already contains acroform field
 
   if (!pdf._acroform) {
     pdf.initForm();
   }
 
   const form = pdf._root.data.AcroForm;
-
+  const fieldId = form.data.Fields.length + 1;
+  const signatureName = `Signature${fieldId}`;
   form.data = {
     Type: 'AcroForm',
     SigFlags: 3,
     Fields: form.data.Fields,
-    DR: form.data.DR,
+    DR: form.data.DR
   };
-
-  const fieldId = form.data.Fields.length + 1;
-
-  const signatureName = `Signature${fieldId}`; // Generate signature annotation widget
-
   const widget = pdf.ref({
     Type: 'Annot',
     Subtype: 'Widget',
@@ -76,14 +71,17 @@ const pdfkitAddPlaceholder = ({
     T: new String(signatureName),
     // eslint-disable-line no-new-wrappers
     // F: 4,
-    P: pdf.page.dictionary // eslint-disable-line no-underscore-dangle
+    P: pdf.page.dictionary
   });
-
   pdf.page.annotations.push(widget); // Include the widget in a page
+
   form.data.Fields.push(widget);
+  signature.end();
+  widget.end(); // form.end() is called by pdfkit itself
 
   return {
     signature,
+    form,
     widget
   };
   /* eslint-enable no-underscore-dangle,no-param-reassign */
