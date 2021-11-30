@@ -8,13 +8,14 @@ var _exportNames = {
   SignPdf: true,
   SignPdfError: true
 };
+exports.SignPdf = exports.DEFAULT_BYTE_RANGE_PLACEHOLDER = void 0;
 Object.defineProperty(exports, "SignPdfError", {
   enumerable: true,
   get: function () {
     return _SignPdfError.default;
   }
 });
-exports.default = exports.SignPdf = exports.DEFAULT_BYTE_RANGE_PLACEHOLDER = void 0;
+exports.default = void 0;
 
 var _SignPdfError = _interopRequireDefault(require("./SignPdfError"));
 
